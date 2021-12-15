@@ -1,6 +1,6 @@
 import shapefile as shp
 import os
-from .maidenhead import Maidenhead, latlongbearing, latlongdistance
+from .maidenhead import Maidenhead, latlonbearing, latlondistance
 import numpy as np
 
 
@@ -34,15 +34,15 @@ def azimuthal_10m_mh(center: Maidenhead):
     for land in coords:
         landmass = []
         for point in land:
-            r = latlongdistance(center_lat, center_lon, point[1], point[0])
-            theta = latlongbearing(center_lat, center_lon, point[1], point[0])
+            r = latlondistance(center_lat, center_lon, point[1], point[0])
+            theta = latlonbearing(center_lat, center_lon, point[1], point[0])
             landmass.append([theta * np.pi / 180, r])
         polars.append(landmass)
     return polars
 
 
 def azimuthal_110m_mh(center: Maidenhead):
-    center.latlong()
+    center.latlon()
     coords = latlon_110m()
     center_lon = center.long
     center_lat = center.lat
@@ -50,8 +50,8 @@ def azimuthal_110m_mh(center: Maidenhead):
     for land in coords:
         landmass = []
         for point in land:
-            r = latlongdistance(center_lat, center_lon, point[1], point[0])
-            theta = latlongbearing(center_lat, center_lon, point[1], point[0])
+            r = latlondistance(center_lat, center_lon, point[1], point[0])
+            theta = latlonbearing(center_lat, center_lon, point[1], point[0])
             landmass.append([theta * np.pi / 180, r])
         polars.append(landmass)
     return polars

@@ -1,7 +1,7 @@
 import math
 
 class Maidenhead:
-    def __init__(self,loc_string: str, latlong: bool = False):
+    def __init__(self,loc_string: str, latlon: bool = False):
         self.loc_string = loc_string
         self.fine_loc_string = ''
         self.valid_characters_1 = "ABCDEFGHIJKLMNOPQR"
@@ -88,11 +88,11 @@ class Maidenhead:
         else:
             self.fine_loc_string += "ll"
 
-        if latlong:
-            self.latlong()
+        if latlon:
+            self.latlon()
     
-    def latlong(self):
-        # convert to lat/long
+    def latlon(self):
+        # convert to lat/lon
         # first convert self.fine_loc_string to a list of numbers
         self.fine_loc_string_list = l = [
             self.valid_characters_1.index(self.fine_loc_string[0]),
@@ -106,7 +106,7 @@ class Maidenhead:
             self.valid_characters_2.index(self.fine_loc_string[8]),
             self.valid_characters_2.index(self.fine_loc_string[9]),
         ]
-        self.long = (l[0]*20 + l[2]*2 + l[4]/12 + l[6]/120 + l[8]/2880) - 180
+        self.lon = (l[0]*20 + l[2]*2 + l[4]/12 + l[6]/120 + l[8]/2880) - 180
         self.lat = (l[1]*10 + l[3] + l[5]/24 + l[7]/240 + l[9]/5760) - 90
 
     def __str__(self):
@@ -118,13 +118,13 @@ class Maidenhead:
 def maidendistance(mh1: Maidenhead, mh2: Maidenhead):
     lat1 = mh1.lat
     lat2 = mh2.lat
-    long1 = mh1.long
-    long2 = mh2.long
+    lon1 = mh1.lon
+    lon2 = mh2.lon
 
     phi1 = lat1 * math.pi / 180
     phi2 = lat2 * math.pi / 180
     dphi = (lat2 - lat1) * math.pi / 180
-    dlam = (long2 - long1) * math.pi / 180
+    dlam = (lon2 - lon1) * math.pi / 180
 
     a = math.sin(dphi / 2) * math.sin(dphi / 2) + math.cos(phi1) * math.cos(phi2) * math.sin(dlam / 2) * math.sin(dlam / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
@@ -133,36 +133,36 @@ def maidendistance(mh1: Maidenhead, mh2: Maidenhead):
 def maidenbearing(mh1: Maidenhead, mh2: Maidenhead):
     lat1 = mh1.lat
     lat2 = mh2.lat
-    long1 = mh1.long
-    long2 = mh2.long
+    lon1 = mh1.lon
+    lon2 = mh2.lon
 
     phi1 = lat1 * math.pi / 180
     phi2 = lat2 * math.pi / 180
     dphi = (lat2 - lat1) * math.pi / 180
-    dlam = (long2 - long1) * math.pi / 180
+    dlam = (lon2 - lon1) * math.pi / 180
 
     theta = math.atan2(math.sin(dlam) * math.cos(phi2), math.cos(phi1) * math.sin(phi2) - math.sin(phi1) * math.cos(phi2) * math.cos(dlam))
     return (theta * 180 / math.pi + 360) % 360
 
 
-def latlongdistance(lat1, long1, lat2, long2):
+def latlondistance(lat1, lon1, lat2, lon2):
     
 
     phi1 = lat1 * math.pi / 180
     phi2 = lat2 * math.pi / 180
     dphi = (lat2 - lat1) * math.pi / 180
-    dlam = (long2 - long1) * math.pi / 180
+    dlam = (lon2 - lon1) * math.pi / 180
 
     a = math.sin(dphi / 2) * math.sin(dphi / 2) + math.cos(phi1) * math.cos(phi2) * math.sin(dlam / 2) * math.sin(dlam / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return 6371 * c
 
-def latlongbearing(lat1, long1, lat2, long2):
+def latlonbearing(lat1, lon1, lat2, lon2):
 
     phi1 = lat1 * math.pi / 180
     phi2 = lat2 * math.pi / 180
     dphi = (lat2 - lat1) * math.pi / 180
-    dlam = (long2 - long1) * math.pi / 180
+    dlam = (lon2 - lon1) * math.pi / 180
 
     theta = math.atan2(math.sin(dlam) * math.cos(phi2), math.cos(phi1) * math.sin(phi2) - math.sin(phi1) * math.cos(phi2) * math.cos(dlam))
     return (theta * 180 / math.pi + 360) % 360
