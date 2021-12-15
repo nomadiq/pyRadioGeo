@@ -6,4 +6,4 @@ Principal functions include:
 
 - conversion of Maidenhead coordinates to lat/lon and vice versa.
 - access to lat/lon coordinated of land masses on earth at 10, 50 and 110m resolution (data is from http://www.naturalearthdata.com)
-- converting between lat/lon and azimuthal (distance, direction) coordinates
+- converting between lat/lon and azimuthal (distance, direction) coordinates. From wikipedia: 'Azimuthal projections have the property that directions from a central point are preserved'
